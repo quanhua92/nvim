@@ -17,4 +17,10 @@ M.harpoon = {
   },
 }
 
+M.rust_tools = {
+  n = {
+    ["<leader>rr"] = { "<cmd> RustHoverActions <CR>", "RustHoverActions" }
+  }
+}
+
 return M

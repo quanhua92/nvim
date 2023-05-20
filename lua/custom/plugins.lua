@@ -1,17 +1,17 @@
 local plugins = {
   {
     "neovim/nvim-lspconfig",
-    config = function ()
+    config = function()
       require "plugins.configs.lspconfig"
       require "custom.configs.lspconfig"
     end,
 
     dependencies = {
       "jose-elias-alvarez/null-ls.nvim",
-      config = function ()
-        require("custom.configs.null-ls")
-      end
-    }
+      config = function()
+        require "custom.configs.null-ls"
+      end,
+    },
   },
   {
     "williamboman/mason.nvim",
@@ -20,9 +20,10 @@ local plugins = {
         "rust-analyzer",
         "typescript-language-server",
         "prettierd",
-        "stylua"
-      }
-    }
+        "eslint_d",
+        "stylua",
+      },
+    },
   },
   {
     "nvim-treesitter/nvim-treesitter",
@@ -45,9 +46,12 @@ local plugins = {
 
         -- low level
         "c",
-      }
-    }
-  }
+      },
+    },
+  },
+  {
+    "ThePrimeagen/harpoon",
+  },
 }
 
 return plugins

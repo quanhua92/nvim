@@ -10,6 +10,7 @@ local sources = {
 
   -- webdev
   b.formatting.prettierd,
+  b.diagnostics.eslint_d.with { diagnostics_format = "[eslint] #{m}\n(#{c})" },
 
   -- Lua
   b.formatting.stylua,

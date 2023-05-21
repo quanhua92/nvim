@@ -19,6 +19,7 @@ local plugins = {
       ensure_installed = {
         "rust-analyzer",
         "typescript-language-server",
+        "tailwindcss-language-server",
         "prettierd",
         "eslint_d",
         "stylua",

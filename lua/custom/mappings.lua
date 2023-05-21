@@ -6,6 +6,23 @@ M.disabled = {
   },
 }
 
+M.custom = {
+  n = {
+    ["<leader>ts"] = {
+      function()
+        vim.o.hlsearch = not vim.o.hlsearch
+      end,
+      "toggle hlsearch",
+    },
+    ["<leader>tr"] = {
+      function()
+        vim.o.relativenumber = not vim.o.relativenumber
+      end,
+      "toggle relative number",
+    },
+  },
+}
+
 M.harpoon = {
   n = {
     ["<C-e>"] = { ":lua require('harpoon.ui').toggle_quick_menu() <CR>", "harpoon toggle_quick_menu" },
@@ -19,8 +36,8 @@ M.harpoon = {
 
 M.rust_tools = {
   n = {
-    ["<leader>rr"] = { "<cmd> RustHoverActions <CR>", "RustHoverActions" }
-  }
+    ["<leader>rr"] = { "<cmd> RustHoverActions <CR>", "RustHoverActions" },
+  },
 }
 
 return M

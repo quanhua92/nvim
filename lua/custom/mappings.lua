@@ -3,6 +3,9 @@ local M = {}
 M.disabled = {
   n = {
     ["<leader>ma"] = "",
+    ["<leader>n"] = "",
+    ["<leader>rn"] = "",
+    ["<leader>th"] = "",
   },
 }
 
@@ -37,6 +40,70 @@ M.harpoon = {
 M.rust_tools = {
   n = {
     ["<leader>rr"] = { "<cmd> RustHoverActions <CR>", "RustHoverActions" },
+  },
+}
+
+M.general = {
+  n = {
+    ["<leader>tn"] = { "<cmd> set nu! <CR>", "toggle line number" },
+  }
+}
+
+M.telescope = {
+  plugin = true,
+  n = {
+    ["<leader>tt"] = { "<cmd> Telescope themes <CR>", "Nvchad themes" },
+  }
+}
+
+M.nvterm = {
+  plugin = true,
+
+  t = {
+    -- toggle in terminal mode
+    ["<M-i>"] = {
+      function()
+        require("nvterm.terminal").toggle "float"
+      end,
+      "Toggle floating term",
+    },
+
+    ["<M-h>"] = {
+      function()
+        require("nvterm.terminal").toggle "horizontal"
+      end,
+      "Toggle horizontal term",
+    },
+    
+    ["<M-v>"] = {
+      function()
+        require("nvterm.terminal").toggle "vertical"
+      end,
+      "Toggle vertical term",
+    },
+  },
+
+  n = {
+    -- toggle in normal mode
+    ["<M-i>"] = {
+      function()
+        require("nvterm.terminal").toggle "float"
+      end,
+      "Toggle floating term",
+    },
+    ["<M-h>"] = {
+      function()
+        require("nvterm.terminal").toggle "horizontal"
+      end,
+      "Toggle horizontal term",
+    },
+
+    ["<M-v>"] = {
+      function()
+        require("nvterm.terminal").toggle "vertical"
+      end,
+      "Toggle vertical term",
+    },
   },
 }
 

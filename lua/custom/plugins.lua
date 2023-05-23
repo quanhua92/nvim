@@ -50,6 +50,7 @@ local plugins = {
 
         -- low level
         "c",
+        "cpp",
       },
     },
   },

@@ -23,6 +23,7 @@ local plugins = {
         "prettierd",
         "eslint_d",
         "stylua",
+        "clangd",
       },
     },
   },

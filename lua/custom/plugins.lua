@@ -24,7 +24,8 @@ local plugins = {
         "eslint_d",
         "stylua",
         "clangd",
-        "clang-format"
+        "clang-format",
+        "cpplint"
       },
     },
   },

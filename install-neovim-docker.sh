@@ -16,5 +16,12 @@ rm /usr/bin/nvim
 ln -s /squashfs-root/AppRun /usr/bin/vim
 ln -s /squashfs-root/AppRun /usr/bin/nvim
 
+LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+tar xf lazygit.tar.gz lazygit
+mv lazygit /usr/bin
+rm /usr/bin/lg
+ln -s /usr/bin/lazygit /usr/bin/lg
+
 echo "set-option -ga terminal-overrides \",$TERM:Tc\"" >> ~/.tmux.config
 echo "alias tmux='tmux -u'" >> ~/.bashrc

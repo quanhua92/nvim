@@ -16,4 +16,5 @@ rm /usr/bin/nvim
 ln -s /squashfs-root/AppRun /usr/bin/vim
 ln -s /squashfs-root/AppRun /usr/bin/nvim
 
-echo "set-option -ga terminal-overrides \",$TERM:Tc\"" > ~/.tmux.config
+echo "set-option -ga terminal-overrides \",$TERM:Tc\"" >> ~/.tmux.config
+echo "alias tmux='tmux -u'" >> ~/.bashrc

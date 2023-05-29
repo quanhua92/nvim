@@ -25,7 +25,8 @@ local plugins = {
         "stylua",
         "clangd",
         "clang-format",
-        "cpplint"
+        "cpplint",
+        "sqlls"
       },
     },
   },
@@ -47,6 +48,9 @@ local plugins = {
 
         -- rust
         "rust",
+
+        -- database
+        "sql",
 
         -- low level
         "c",

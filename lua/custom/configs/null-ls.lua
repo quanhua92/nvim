@@ -18,6 +18,9 @@ local sources = {
   -- Cpp
   b.formatting.clang_format,
 
+  -- SQL: apt install pgformatter
+  b.formatting.pg_format,
+
   -- Shell
   b.formatting.shfmt,
   b.diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },

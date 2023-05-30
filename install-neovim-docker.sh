@@ -23,5 +23,9 @@ mv lazygit /usr/bin
 rm /usr/bin/lg
 ln -s /usr/bin/lazygit /usr/bin/lg
 
-echo "set-option -ga terminal-overrides \",$TERM:Tc\"" >> ~/.tmux.config
+cp ~/.config/nvim/.tmux.conf ~/.tmux.conf
 echo "alias tmux='tmux -u'" >> ~/.bashrc
+echo "export LC_ALL=en_US.UTF-8" >> ~/.bashrc
+echo "export LANG=en_US.UTF-8" >> ~/.bashrc
+locale-gen en_US.UTF-8
+tmux kill-server

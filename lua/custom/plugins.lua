@@ -26,7 +26,10 @@ local plugins = {
         "clangd",
         "clang-format",
         "cpplint",
-        "sqlls"
+        "sqlls",
+        "pyright",
+        "flake8",
+        "black",
       },
     },
   },
@@ -45,6 +48,9 @@ local plugins = {
         "typescript",
         "tsx",
         "json",
+
+        -- python
+        "python",
 
         -- rust
         "rust",

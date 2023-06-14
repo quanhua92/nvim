@@ -26,6 +26,7 @@ sudo ln -s /usr/bin/lazygit /usr/bin/lg
 
 cp ~/.config/nvim/.tmux.conf ~/.tmux.conf
 echo "alias tmux='tmux -u'" >> ~/.bashrc
+echo "alias takeover='tmux detach -a'" >> ~/.bashrc
 echo "export LC_ALL=en_US.UTF-8" >> ~/.bashrc
 echo "export LANG=en_US.UTF-8" >> ~/.bashrc
 sudo locale-gen en_US.UTF-8

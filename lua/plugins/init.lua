@@ -200,12 +200,17 @@ local default_plugins = {
 
   {
     "numToStr/Comment.nvim",
-    keys = { "gcc", "gbc" },
+    keys = {
+      { "gcc", mode = "n", desc = "Toggles comment on current line" },
+      { "gc", mode = { "n", "o", "x" }, desc = "Toggles comment on current line's region" },
+      { "gbc", mode = "n", desc = "Toggles blockwise comment on current line" },
+      { "gb", mode = { "n", "o", "x" }, desc = "Toggles blockwise comment on region" },
+    },
     init = function()
       require("core.utils").load_mappings "comment"
     end,
-    config = function()
-      require("Comment").setup()
+    config = function(_, opts)
+      require("Comment").setup(opts)
     end,
   },
 
@@ -228,6 +233,7 @@ local default_plugins = {
 
   {
     "nvim-telescope/telescope.nvim",
+    dependencies = "nvim-treesitter/nvim-treesitter",
     cmd = "Telescope",
     init = function()
       require("core.utils").load_mappings "telescope"
@@ -250,7 +256,7 @@ local default_plugins = {
   -- Only load whichkey after all the gui
   {
     "folke/which-key.nvim",
-    keys = { "<leader>", '"', "'", "`", "c", "v" },
+    keys = { "<leader>", '"', "'", "`", "c", "v", "g" },
     init = function()
       require("core.utils").load_mappings "whichkey"
     end,

@@ -29,7 +29,7 @@ M.custom = {
     ["kj"] = {"<esc>", "kj to enter normal mode"},
   },
   t = {
-    [",,"] = {"<C-\\><C-n>", "jk to enter normal mode"},
+    [",,"] = {"<C-\\><C-n>", ",, in terminal mode to enter normal mode"},
   }
 }
 

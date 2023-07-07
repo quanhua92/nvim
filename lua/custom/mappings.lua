@@ -24,6 +24,13 @@ M.custom = {
       "toggle relative number",
     },
   },
+  i = {
+    ["jk"] = {"<esc>", "jk to enter normal mode"},
+    ["kj"] = {"<esc>", "kj to enter normal mode"},
+  },
+  t = {
+    [",,"] = {"<C-\\><C-n>", "jk to enter normal mode"},
+  }
 }
 
 M.harpoon = {

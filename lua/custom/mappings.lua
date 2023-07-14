@@ -9,6 +9,24 @@ M.disabled = {
   },
 }
 
+M.lsp_tools = {
+  n = {
+    ["<leader>lf"] = {
+      function()
+        vim.diagnostic.open_float()
+      end,
+      "vim.diagnostic.open_float()",
+    },
+    ["<leader>lc"] = {
+      function()
+        vim.lsp.buf.code_action()
+      end,
+      "vim.lsp.buf.code_action()",
+    },
+    ["<leader>lr"] = { "<cmd> RustHoverActions <CR>", "RustHoverActions" },
+  },
+}
+
 M.custom = {
   n = {
     ["<leader>ts"] = {
@@ -25,12 +43,12 @@ M.custom = {
     },
   },
   i = {
-    ["jk"] = {"<esc>", "jk to enter normal mode"},
-    ["kj"] = {"<esc>", "kj to enter normal mode"},
+    ["jk"] = { "<esc>", "jk to enter normal mode" },
+    ["kj"] = { "<esc>", "kj to enter normal mode" },
   },
   t = {
-    [",,"] = {"<C-\\><C-n>", ",, in terminal mode to enter normal mode"},
-  }
+    [",,"] = { "<C-\\><C-n>", ",, in terminal mode to enter normal mode" },
+  },
 }
 
 M.harpoon = {
@@ -44,23 +62,17 @@ M.harpoon = {
   },
 }
 
-M.rust_tools = {
-  n = {
-    ["<leader>rr"] = { "<cmd> RustHoverActions <CR>", "RustHoverActions" },
-  },
-}
-
 M.general = {
   n = {
     ["<leader>tn"] = { "<cmd> set nu! <CR>", "toggle line number" },
-  }
+  },
 }
 
 M.telescope = {
   plugin = true,
   n = {
     ["<leader>tt"] = { "<cmd> Telescope themes <CR>", "Nvchad themes" },
-  }
+  },
 }
 
 M.nvterm = {
@@ -81,7 +93,7 @@ M.nvterm = {
       end,
       "Toggle horizontal term",
     },
-    
+
     ["<M-v>"] = {
       function()
         require("nvterm.terminal").toggle "vertical"

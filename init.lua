@@ -244,7 +244,7 @@ vim.keymap.set('n', '<S-Left>', '<cmd>BufferLineMovePrev<cr>', { desc = 'Move Ta
 vim.keymap.set('n', '<S-Right>', '<cmd>BufferLineMoveNext<cr>', { desc = 'Move Tab Right' })
 
 -- Close current buffer safely
-vim.keymap.set('n', '<leader>x', '<cmd>bp|bd #<cr>', { desc = 'Close Current Tab' })
+vim.keymap.set('n', '<leader>bd', '<cmd>bp|bd #<cr>', { desc = 'Close Current Tab' })
 
 -- Close all OTHER buffers (Clean up)
 vim.keymap.set('n', '<leader>bo', '<cmd>BufferLineCloseOthers<cr>', { desc = 'Close Other Tabs' })
@@ -472,6 +472,7 @@ require('lazy').setup({
           -- This is where a variable was first declared, or where a function is defined, etc.
           -- To jump back, press <C-t>.
           vim.keymap.set('n', 'grd', builtin.lsp_definitions, { buffer = buf, desc = '[G]oto [D]efinition' })
+          vim.keymap.set('n', 'gd', builtin.lsp_definitions, { buffer = buf, desc = '[G]oto [D]efinition' })
 
           -- Fuzzy find all the symbols in your current document.
           -- Symbols are things like variables, functions, types, etc.

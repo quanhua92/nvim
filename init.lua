@@ -246,6 +246,9 @@ vim.keymap.set('n', '<S-Right>', '<cmd>BufferLineMoveNext<cr>', { desc = 'Move T
 -- Close current buffer safely
 vim.keymap.set('n', '<leader>bd', '<cmd>bp|bd #<cr>', { desc = 'Close Current Tab' })
 
+-- Close current buffer without worrying about unsaved changes
+vim.keymap.set('n', '<leader>bq', ':q<CR>', { desc = '[B]uffer [Q]uit window' })
+
 -- Close all OTHER buffers (Clean up)
 vim.keymap.set('n', '<leader>bo', '<cmd>BufferLineCloseOthers<cr>', { desc = 'Close Other Tabs' })
 
@@ -254,6 +257,13 @@ vim.keymap.set("n", "<leader>wf", "<Plug>(WayfinderOpen)", { desc = "Wayfinder" 
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'python',
+    callback = function()
+      vim.keymap.set('n', '<leader>r', ':UVRunFile<CR>', { buffer = true, desc = '[R]un Python with UV' })
+    end,
+})
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode

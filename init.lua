@@ -166,6 +166,32 @@ vim.o.confirm = true
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+--
+
+-- Terminal mode keymaps
+-- Exit terminal mode
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
+-- Move from terminal to left window
+vim.keymap.set('t', '<C-h>', [[<C-\><C-n><C-w>h]], { desc = 'Move to left window' })
+-- Move from terminal to bottom window
+vim.keymap.set('t', '<C-j>', [[<C-\><C-n><C-w>j]], { desc = 'Move to bottom window' })
+-- Move from terminal to top window
+vim.keymap.set('t', '<C-k>', [[<C-\><C-n><C-w>k]], { desc = 'Move to top window' })
+-- Move from terminal to right window
+vim.keymap.set('t', '<C-l>', [[<C-\><C-n><C-w>l]], { desc = 'Move to right window' })
+-- Leader 't' terminal creation group
+-- Bottom Terminal (b for bottom)
+vim.keymap.set('n', '<leader>tb', ':botright split | resize 15 | term<CR>', { desc = '[T]erminal [B]ottom' })
+-- Top Terminal (t for top)
+vim.keymap.set('n', '<leader>tt', ':topleft split | resize 15 | term<CR>', { desc = '[T]erminal [T]op' })
+-- Current File Directory Terminal (c for current)
+vim.keymap.set('n', '<leader>tc', ':botright split | resize 15 | terminal cd %:p:h && $SHELL<CR>', { desc = '[T]erminal [C]urrent dir' })
+-- Vertical Terminal (v for vertical)
+vim.keymap.set('n', '<leader>tv', ':vsplit | terminal<CR>', { desc = '[T]erminal [V]ertical' })
+-- New Tab Terminal (n for new tab)
+vim.keymap.set('n', '<leader>tn', ':tabnew | terminal<CR>', { desc = '[T]erminal [N]ew tab' })
+
+
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -257,6 +283,14 @@ vim.keymap.set("n", "<leader>wf", "<Plug>(WayfinderOpen)", { desc = "Wayfinder" 
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
+
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = vim.api.nvim_create_augroup('custom-terminal', { clear = true }),
+  callback = function()
+    vim.cmd('startinsert')
+  end,
+})
+
 
 vim.api.nvim_create_autocmd('FileType', {
     pattern = 'python',
@@ -361,7 +395,7 @@ require('lazy').setup({
       -- Document existing key chains
       spec = {
         { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
-        { '<leader>t', group = '[T]oggle' },
+        { '<leader>t', group = '[T]erminal' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } }, -- Enable gitsigns recommended keymaps first
         { 'gr', group = 'LSP Actions', mode = { 'n' } },
       },

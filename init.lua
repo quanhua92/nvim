@@ -191,8 +191,6 @@ vim.keymap.set('n', '<leader>tv', ':vsplit | terminal<CR>', { desc = '[T]erminal
 -- New Tab Terminal (n for new tab)
 vim.keymap.set('n', '<leader>tn', ':tabnew | terminal<CR>', { desc = '[T]erminal [N]ew tab' })
 
-
-
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -241,7 +239,7 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- Press Ctrl+w followed by / to take up 2/3 of the screen
 vim.keymap.set('n', '<C-w>/', function()
   -- math.floor ensures we get a whole column number
-  local width = math.floor(vim.o.columns * 0.66) 
+  local width = math.floor(vim.o.columns * 0.66)
   vim.cmd('vertical resize ' .. width)
 end, { desc = 'Window: set 2/3 width' })
 
@@ -250,7 +248,6 @@ vim.keymap.set('n', '<C-w>?', function()
   local width = math.floor(vim.o.columns * 0.33)
   vim.cmd('vertical resize ' .. width)
 end, { desc = 'Window: set 1/3 width' })
-
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -293,24 +290,19 @@ vim.keymap.set('n', '<leader>bq', ':q<CR>', { desc = '[B]uffer [Q]uit window' })
 vim.keymap.set('n', '<leader>bo', '<cmd>BufferLineCloseOthers<cr>', { desc = 'Close Other Tabs' })
 
 -- Wayfinder
-vim.keymap.set("n", "<leader>wf", "<Plug>(WayfinderOpen)", { desc = "Wayfinder" })
+vim.keymap.set('n', '<leader>wf', '<Plug>(WayfinderOpen)', { desc = 'Wayfinder' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
 vim.api.nvim_create_autocmd('TermOpen', {
   group = vim.api.nvim_create_augroup('custom-terminal', { clear = true }),
-  callback = function()
-    vim.cmd('startinsert')
-  end,
+  callback = function() vim.cmd 'startinsert' end,
 })
 
-
 vim.api.nvim_create_autocmd('FileType', {
-    pattern = 'python',
-    callback = function()
-      vim.keymap.set('n', '<leader>r', ':UVRunFile<CR>', { buffer = true, desc = '[R]un Python with UV' })
-    end,
+  pattern = 'python',
+  callback = function() vim.keymap.set('n', '<leader>r', ':UVRunFile<CR>', { buffer = true, desc = '[R]un Python with UV' }) end,
 })
 
 -- Highlight when yanking (copying) text
@@ -699,6 +691,14 @@ require('lazy').setup({
         -- clangd = {},
         -- gopls = {},
         pyright = {},
+        ruff = {
+          on_init = function(client)
+            if client.name == 'ruff' then
+              -- This disables hover actions so Ruff does not fight with Pyright
+              client.server_capabilities.hoverProvider = false
+            end
+          end,
+        },
         rust_analyzer = {},
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -785,7 +785,7 @@ require('lazy').setup({
         -- You can specify filetypes to autoformat on save here:
         local enabled_filetypes = {
           -- lua = true,
-          -- python = true,
+          python = true,
         }
         if enabled_filetypes[vim.bo[bufnr].filetype] then
           return { timeout_ms = 500 }
@@ -801,6 +801,7 @@ require('lazy').setup({
         -- rust = { 'rustfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
+        python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },

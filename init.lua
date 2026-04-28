@@ -238,6 +238,20 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- Press Ctrl+w followed by / to take up 2/3 of the screen
+vim.keymap.set('n', '<C-w>/', function()
+  -- math.floor ensures we get a whole column number
+  local width = math.floor(vim.o.columns * 0.66) 
+  vim.cmd('vertical resize ' .. width)
+end, { desc = 'Window: set 2/3 width' })
+
+-- Press Ctrl+w followed by ? to take up 1/3 of the screen
+vim.keymap.set('n', '<C-w>?', function()
+  local width = math.floor(vim.o.columns * 0.33)
+  vim.cmd('vertical resize ' .. width)
+end, { desc = 'Window: set 1/3 width' })
+
+
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })

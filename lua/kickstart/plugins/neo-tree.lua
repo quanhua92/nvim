@@ -19,6 +19,10 @@ return {
   ---@type neotree.Config
   opts = {
     filesystem = {
+      follow_current_file = {
+        enabled = true, -- This will find and focus the file in the active buffer every time
+        leave_dirs_open = false, -- `false` Collapses folders you aren't currently using.
+      },
       window = {
         mappings = {
           ['\\'] = 'close_window',

@@ -1,5 +1,31 @@
 # kickstart.nvim
 
+```bash
+# 1. System packages
+sudo apt install -y ripgrep fd-find tree-sitter-cli
+sudo ln -sf /usr/bin/fdfind /usr/local/bin/fd  # fd-find installs as fdfind
+
+# 2. Node.js via nvm (for LSP servers like pyright, typescript-language-server)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm install --lts
+sudo ln -sf "$NVM_DIR/versions/node/$(nvm version)/bin/node" /usr/local/bin/node
+sudo ln -sf "$NVM_DIR/versions/node/$(nvm version)/bin/npm" /usr/local/bin/npm
+
+# 3. Rust (for rust-analyzer LSP and newer tree-sitter-cli)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+. "$HOME/.cargo/env"
+sudo ln -sf ~/.cargo/bin/rustc /usr/local/bin/rustc
+sudo ln -sf ~/.cargo/bin/cargo /usr/local/bin/cargo
+sudo ln -sf ~/.cargo/bin/rust-analyzer /usr/local/bin/rust-analyzer
+
+# 4. Newer tree-sitter-cli (Ubuntu package is too old)
+sudo apt remove -y tree-sitter-cli
+cargo install tree-sitter-cli
+sudo ln -sf ~/.cargo/bin/tree-sitter /usr/local/bin/tree-sitter
+```
+
 ## Introduction
 
 A starting point for Neovim that is:

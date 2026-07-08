@@ -692,7 +692,33 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {},
+        jsonls = { },
+        pyright = {
+          cmd = (function()
+            local root = vim.fs.root(0, { "pyproject.toml", "pyrightconfig.json" })
+            if root then
+              local local_python = root .. "/.venv/bin/python"
+              -- Verifies the python binary exists inside your active .venv
+              if vim.fn.executable(local_python) == 1 then
+                return { local_python, "-m", "pyright.langserver", "--stdio" }
+              end
+            end
+            -- Fallback system execution if project .venv is missing
+            return { "pyright-langserver", "--stdio" }
+          end)(),
+          settings = {
+            python = {
+              analysis = {
+                -- Uses your generated ./typings files for instant lookup
+                useLibraryCodeForTypes = true,
+                -- Prevents Pyright from deep background crawling your entire .venv
+                indexing = false,
+                -- Stops Pyright from auto-suggesting thousands of heavy unimported torch submodules
+                autoImportCompletions = false,
+              }
+            }
+          }
+        },
         ruff = {
           on_init = function(client)
             if client.name == 'ruff' then

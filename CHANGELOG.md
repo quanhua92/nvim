@@ -84,7 +84,7 @@ Conform format key: `<leader>f` → `<leader>fc` (SECTION 7).
 ## 7. LSP servers — `init.lua` SECTION 6
 ```lua
 local servers = {
-  jsonls = {}, ts_ls = {}, rust_analyzer = {},
+  jsonls = {}, ts_ls = {}, rust_analyzer = {},  -- jsonls/ts_ls conditional on npm (see Prerequisites)
   pyright = { cmd = venv-aware, settings = { python = { analysis = { indexing = false, ... } } } },
   ruff = { on_init = disable hoverProvider },
   ...
@@ -119,6 +119,14 @@ code-preview.nvim: inline preview. github-preview.nvim: `localhost:9999`, `<lead
 ## 13. Tooling & infra
 - `termux_bridge_mason.sh`: symlinks system binaries into Mason dirs for Termux.
 - README: deps install block under "Install External Dependencies".
+- `clean-nvim.sh`: removes stale lazy.nvim data + cache after migrating to vim.pack.
+
+## 14. vim.pack user commands — `init.lua` SECTION 3
+```lua
+vim.api.nvim_create_user_command('PackStatus', function() vim.pack.update(nil, { offline = true }) end, { desc = 'Show plugin status (offline)' })
+vim.api.nvim_create_user_command('PackUpdate', function() vim.pack.update() end, { desc = 'Update all plugins (:write to apply, :q to cancel)' })
+```
+Usage: `:PackStatus` to inspect, `:PackUpdate` to fetch updates.
 
 ## Migration note
 Ported from lazy.nvim → vim.pack on 2026-07-28. Plugin specs in `lua/custom/plugins/*.lua` were rewritten from LazySpec tables to self-executing `vim.pack.add` + `setup()` calls. Old lazy.nvim version preserved on branch `backup/lazy-config`.

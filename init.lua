@@ -742,9 +742,13 @@ do
           callback = function(event2)
             vim.lsp.buf.clear_references()
             vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-          end,
-        })
-      end
+    end,
+  })
+
+  -- [[ Custom: user commands for vim.pack ]]
+  vim.api.nvim_create_user_command('PackStatus', function() vim.pack.update(nil, { offline = true }) end, { desc = 'Show plugin status (offline)' })
+  vim.api.nvim_create_user_command('PackUpdate', function() vim.pack.update() end, { desc = 'Update all plugins (:write to apply, :q to cancel)' })
+end
 
       -- The following code creates a keymap to toggle inlay hints in your
       -- code, if the language server you are using supports them

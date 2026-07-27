@@ -864,6 +864,14 @@ end
     -- You can add other tools here that you want Mason to install
   })
 
+  -- Skip Mason install for tools already available on system PATH
+  -- (e.g. ruff installed via uv, stylua via cargo)
+  local system_binaries = { ruff = 'ruff', stylua = 'stylua' }
+  ensure_installed = vim.tbl_filter(function(name)
+    local bin = system_binaries[name]
+    return not bin or vim.fn.executable(bin) ~= 1
+  end, ensure_installed)
+
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
   for name, server in pairs(servers) do

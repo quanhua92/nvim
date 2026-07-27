@@ -4,6 +4,21 @@ My personal customizations on top of kickstart.nvim. Migrated from lazy.nvim to 
 
 ---
 
+## Prerequisites (beyond stock kickstart)
+
+Stock kickstart already requires: `git`, `make`, `unzip`, C compiler (`gcc`), `ripgrep`, `fd-find`, `tree-sitter CLI`, optional Nerd Font.
+
+| External tool | Required by | Install | If missing |
+|---|---|---|---|
+| **Nerd Font** | bufferline, neo-tree icons (SECTION 1 sets `have_nerd_font = true`) | [nerdfonts.com](https://www.nerdfonts.com/) | Icons render as boxes; set `have_nerd_font = false` |
+| **Node.js + npm** | pyright LSP, jsonls/ts_ls | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo -E bash - && sudo apt install -y nodejs` | jsonls/ts_ls auto-skip (conditional on `npm`); pyright won't install via Mason |
+| **Python 3** | pyright venv detection (`<leader>r`), ruff | `sudo apt install -y python3` | pyright/ruff won't install via Mason |
+| **uv** | `<leader>r` runs `:UVRunFile` | `curl -LsSf https://astral.sh/uv/install.sh \| sh` | `<leader>r` is a no-op; uv.nvim loads but command fails |
+| **Rust toolchain** | rust_analyzer LSP | `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \| sh` | rust_analyzer won't install via Mason |
+| **GitHub Copilot subscription** | copilot.lua (`<C-j>` accept) | `:Copilot auth` on first run | Plugin loads but no suggestions appear |
+
+---
+
 ## 1. UI & Editor Basics — `init.lua` SECTION 1
 ```lua
 vim.g.have_nerd_font = true          -- was false

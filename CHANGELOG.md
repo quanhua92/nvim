@@ -11,7 +11,7 @@ Stock kickstart already requires: `git`, `make`, `unzip`, C compiler (`gcc`), `r
 | External tool | Required by | Install | If missing |
 |---|---|---|---|
 | **Nerd Font** | bufferline, neo-tree icons (SECTION 1 sets `have_nerd_font = true`) | [nerdfonts.com](https://www.nerdfonts.com/) | Icons render as boxes; set `have_nerd_font = false` |
-| **Node.js + npm** | pyright LSP, jsonls/ts_ls | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo -E bash - && sudo apt install -y nodejs` | jsonls/ts_ls auto-skip (conditional on `npm`); pyright won't install via Mason |
+| **Node.js v22+ + npm** | copilot.lua (v22+ required), pyright LSP, jsonls/ts_ls | `curl -fsSL https://deb.nodesource.com/setup_22.x \| sudo -E bash - && sudo apt install -y nodejs` | copilot.lua errors on v20; jsonls/ts_ls auto-skip (conditional on `npm`); pyright won't install via Mason |
 | **Python 3** | pyright venv detection (`<leader>r`), ruff | `sudo apt install -y python3` | pyright/ruff won't install via Mason |
 | **uv** | `<leader>r` runs `:UVRunFile` | `curl -LsSf https://astral.sh/uv/install.sh \| sh` | `<leader>r` is a no-op; uv.nvim loads but command fails |
 | **Rust toolchain** | rust_analyzer LSP | `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \| sh` | rust_analyzer won't install via Mason |

@@ -99,7 +99,7 @@ do
   vim.g.maplocalleader = ' '
 
   -- Set to true if you have a Nerd Font installed and selected in the terminal
-  vim.g.have_nerd_font = false
+  vim.g.have_nerd_font = true
 
   -- [[ Setting options ]]
   --  See `:help vim.o`
@@ -110,7 +110,7 @@ do
   vim.o.number = true
   -- You can also add relative line numbers, to help with jumping.
   --  Experiment for yourself to see if you like it!
-  -- vim.o.relativenumber = true
+  vim.o.relativenumber = true
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
@@ -240,6 +240,51 @@ do
   -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
   -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
+  -- [[ Custom: Terminal mode keymaps ]]
+  vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
+  vim.keymap.set('t', '<C-h>', [[<C-\><C-n><C-w>h]], { desc = 'Move to left window' })
+  vim.keymap.set('t', '<C-j>', [[<C-\><C-n><C-w>j]], { desc = 'Move to bottom window' })
+  vim.keymap.set('t', '<C-k>', [[<C-\><C-n><C-w>k]], { desc = 'Move to top window' })
+  vim.keymap.set('t', '<C-l>', [[<C-\><C-n><C-w>l]], { desc = 'Move to right window' })
+  vim.keymap.set('n', '<leader>tb', ':botright split | resize 15 | term<CR>', { desc = '[T]erminal [B]ottom' })
+  vim.keymap.set('n', '<leader>tt', ':topleft split | resize 15 | term<CR>', { desc = '[T]erminal [T]op' })
+  vim.keymap.set('n', '<leader>tc', ':botright split | resize 15 | terminal cd %:p:h && $SHELL<CR>', { desc = '[T]erminal [C]urrent dir' })
+  vim.keymap.set('n', '<leader>tv', ':vsplit | terminal<CR>', { desc = '[T]erminal [V]ertical' })
+  vim.keymap.set('n', '<leader>tn', ':tabnew | terminal<CR>', { desc = '[T]erminal [N]ew tab' })
+
+  -- [[ Custom: Neo-tree toggle/focus ]]
+  vim.keymap.set('n', '<leader>e', ':Neotree toggle<CR>', { desc = 'Toggle Neo-tree' })
+  vim.keymap.set('n', '<leader>o', ':Neotree focus<CR>', { desc = 'Focus Neo-tree' })
+
+  -- [[ Custom: Bufferline (tabs) ]]
+  vim.keymap.set('n', '<S-h>', '<cmd>BufferLineCyclePrev<cr>', { desc = 'Prev Tab' })
+  vim.keymap.set('n', '<S-l>', '<cmd>BufferLineCycleNext<cr>', { desc = 'Next Tab' })
+  vim.keymap.set('n', '<Tab>', '<cmd>BufferLineCycleNext<cr>', { desc = 'Next Tab' })
+  vim.keymap.set('n', '<S-Tab>', '<cmd>BufferLineCyclePrev<cr>', { desc = 'Prev Tab' })
+  vim.keymap.set('n', '<leader>1', '<cmd>BufferLineGoToBuffer 1<cr>', { desc = 'Tab 1' })
+  vim.keymap.set('n', '<leader>2', '<cmd>BufferLineGoToBuffer 2<cr>', { desc = 'Tab 2' })
+  vim.keymap.set('n', '<leader>3', '<cmd>BufferLineGoToBuffer 3<cr>', { desc = 'Tab 3' })
+  vim.keymap.set('n', '<leader>4', '<cmd>BufferLineGoToBuffer 4<cr>', { desc = 'Tab 4' })
+  vim.keymap.set('n', '<leader>5', '<cmd>BufferLineGoToBuffer 5<cr>', { desc = 'Tab 5' })
+  vim.keymap.set('n', '<S-Left>', '<cmd>BufferLineMovePrev<cr>', { desc = 'Move Tab Left' })
+  vim.keymap.set('n', '<S-Right>', '<cmd>BufferLineMoveNext<cr>', { desc = 'Move Tab Right' })
+  vim.keymap.set('n', '<leader>bd', '<cmd>bp|bd #<cr>', { desc = 'Close Current Tab' })
+  vim.keymap.set('n', '<leader>bq', ':q<CR>', { desc = '[B]uffer [Q]uit window' })
+  vim.keymap.set('n', '<leader>bo', '<cmd>BufferLineCloseOthers<cr>', { desc = 'Close Other Tabs' })
+
+  -- [[ Custom: Window resize ]]
+  vim.keymap.set('n', '<C-w>/', function()
+    local width = math.floor(vim.o.columns * 0.66)
+    vim.cmd('vertical resize ' .. width)
+  end, { desc = 'Window: set 2/3 width' })
+  vim.keymap.set('n', '<C-w>?', function()
+    local width = math.floor(vim.o.columns * 0.33)
+    vim.cmd('vertical resize ' .. width)
+  end, { desc = 'Window: set 1/3 width' })
+
+  -- [[ Custom: Wayfinder ]]
+  vim.keymap.set('n', '<leader>wf', '<Plug>(WayfinderOpen)', { desc = 'Wayfinder' })
+
   -- [[ Basic Autocommands ]]
   --  See `:help lua-guide-autocommands`
 
@@ -250,6 +295,18 @@ do
     desc = 'Highlight when yanking (copying) text',
     group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
     callback = function() vim.hl.on_yank() end,
+  })
+
+  -- [[ Custom: auto-insert in terminal ]]
+  vim.api.nvim_create_autocmd('TermOpen', {
+    group = vim.api.nvim_create_augroup('custom-terminal', { clear = true }),
+    callback = function() vim.cmd 'startinsert' end,
+  })
+
+  -- [[ Custom: run Python file with UV ]]
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'python',
+    callback = function() vim.keymap.set('n', '<leader>r', ':UVRunFile<CR>', { buffer = true, desc = '[R]un Python with UV' }) end,
   })
 end
 
@@ -315,6 +372,12 @@ do
         vim.cmd 'TSUpdate'
         return
       end
+
+      -- Custom: Copilot auth on install/update
+      if name == 'copilot.lua' then
+        vim.schedule(function() vim.cmd 'Copilot auth' end)
+        return
+      end
     end,
   })
 end
@@ -370,7 +433,7 @@ do
     -- Document existing key chains
     spec = {
       { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
-      { '<leader>t', group = '[T]oggle' },
+      { '<leader>t', group = '[T]erminal' },
       { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } }, -- Enable gitsigns recommended keymaps first
       { 'gr', group = 'LSP Actions', mode = { 'n' } },
     },
@@ -511,12 +574,17 @@ do
 
   -- See `:help telescope.builtin`
   local builtin = require 'telescope.builtin'
+  vim.keymap.set('n', '<leader>sj', builtin.jumplist, { desc = '[S]earch [J]umplist' })
+  vim.keymap.set('n', '<leader>sm', builtin.marks, { desc = '[S]earch [M]arks' })
   vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
   vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
   vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+  vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = '[F]ind [F]iles' })
   vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
   vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
   vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+  vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = '[F]ind by [G]rep' })
+  vim.keymap.set('n', '<leader>fw', builtin.live_grep, { desc = '[F]ind [Word] by Grep' })
   vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
   vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
   vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
@@ -541,6 +609,7 @@ do
       -- This is where a variable was first declared, or where a function is defined, etc.
       -- To jump back, press <C-t>.
       vim.keymap.set('n', 'grd', builtin.lsp_definitions, { buffer = buf, desc = '[G]oto [D]efinition' })
+      vim.keymap.set('n', 'gd', builtin.lsp_definitions, { buffer = buf, desc = '[G]oto [D]efinition' })
 
       -- Fuzzy find all the symbols in your current document.
       -- Symbols are things like variables, functions, types, etc.
@@ -694,14 +763,33 @@ do
   local servers = {
     -- clangd = {},
     -- gopls = {},
-    -- pyright = {},
-    -- rust_analyzer = {},
-    --
-    -- Some languages (like typescript) have entire language plugins that can be useful:
-    --    https://github.com/pmizio/typescript-tools.nvim
-    --
-    -- But for many setups, the LSP (`ts_ls`) will work just fine
-    -- ts_ls = {},
+    jsonls = {},
+    ts_ls = {},
+    rust_analyzer = {},
+    pyright = {
+      cmd = (function()
+        local root = vim.fs.root(0, { 'pyproject.toml', 'pyrightconfig.json' })
+        if root then
+          local local_python = root .. '/.venv/bin/python'
+          if vim.fn.executable(local_python) == 1 then return { local_python, '-m', 'pyright.langserver', '--stdio' } end
+        end
+        return { 'pyright-langserver', '--stdio' }
+      end)(),
+      settings = {
+        python = {
+          analysis = {
+            useLibraryCodeForTypes = true,
+            indexing = false,
+            autoImportCompletions = false,
+          },
+        },
+      },
+    },
+    ruff = {
+      on_init = function(client)
+        if client.name == 'ruff' then client.server_capabilities.hoverProvider = false end
+      end,
+    },
 
     stylua = {}, -- Used to format Lua code
 
@@ -788,8 +876,7 @@ do
     format_on_save = function(bufnr)
       -- You can specify filetypes to autoformat on save here:
       local enabled_filetypes = {
-        -- lua = true,
-        -- python = true,
+        python = true,
       }
       if enabled_filetypes[vim.bo[bufnr].filetype] then
         return { timeout_ms = 500 }
@@ -802,6 +889,7 @@ do
     },
     -- You can also specify external formatters in here.
     formatters_by_ft = {
+      python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
       -- rust = { 'rustfmt' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
@@ -811,7 +899,7 @@ do
     },
   }
 
-  vim.keymap.set({ 'n', 'v' }, '<leader>f', function() require('conform').format { async = true } end, { desc = '[F]ormat buffer' })
+  vim.keymap.set({ 'n', 'v' }, '<leader>fc', function() require('conform').format { async = true } end, { desc = '[F]ormat [C]ode' })
 end
 
 -- ============================================================
@@ -858,7 +946,14 @@ do
       -- <c-k>: Toggle signature help
       --
       -- See `:help blink-cmp-config-keymap` for defining your own keymap
-      preset = 'default',
+      preset = 'enter',
+
+      ['<S-Tab>'] = {
+        'snippet_backward',
+        function()
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-d>', true, true, true), 'n', true)
+        end,
+      },
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -910,7 +1005,7 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'vim', 'vimdoc' }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer
@@ -976,13 +1071,13 @@ do
   -- require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
   -- require 'kickstart.plugins.autopairs'
-  -- require 'kickstart.plugins.neo-tree'
+  require 'kickstart.plugins.neo-tree'
   -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- require 'custom.plugins'
+  require 'custom.plugins'
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`

@@ -763,8 +763,6 @@ do
   local servers = {
     -- clangd = {},
     -- gopls = {},
-    jsonls = {},
-    ts_ls = {},
     rust_analyzer = {},
     pyright = {
       cmd = (function()
@@ -828,6 +826,12 @@ do
       },
     },
   }
+
+  -- npm-based servers: only enable when Node.js is available
+  if vim.fn.executable 'npm' == 1 then
+    servers.jsonls = {}
+    servers.ts_ls = {}
+  end
 
   vim.pack.add {
     gh 'neovim/nvim-lspconfig',

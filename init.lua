@@ -692,19 +692,17 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        jsonls = { },
+        jsonls = {},
         pyright = {
           cmd = (function()
-            local root = vim.fs.root(0, { "pyproject.toml", "pyrightconfig.json" })
+            local root = vim.fs.root(0, { 'pyproject.toml', 'pyrightconfig.json' })
             if root then
-              local local_python = root .. "/.venv/bin/python"
+              local local_python = root .. '/.venv/bin/python'
               -- Verifies the python binary exists inside your active .venv
-              if vim.fn.executable(local_python) == 1 then
-                return { local_python, "-m", "pyright.langserver", "--stdio" }
-              end
+              if vim.fn.executable(local_python) == 1 then return { local_python, '-m', 'pyright.langserver', '--stdio' } end
             end
             -- Fallback system execution if project .venv is missing
-            return { "pyright-langserver", "--stdio" }
+            return { 'pyright-langserver', '--stdio' }
           end)(),
           settings = {
             python = {
@@ -715,9 +713,9 @@ require('lazy').setup({
                 indexing = false,
                 -- Stops Pyright from auto-suggesting thousands of heavy unimported torch submodules
                 autoImportCompletions = false,
-              }
-            }
-          }
+              },
+            },
+          },
         },
         ruff = {
           on_init = function(client)
@@ -893,6 +891,14 @@ require('lazy').setup({
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'enter',
+
+        ['<S-Tab>'] = {
+          'snippet_backward',
+          function()
+            -- Manually trigger Neovim's native Insert-mode un-indent
+            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-d>', true, true, true), 'n', true)
+          end,
+        },
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps

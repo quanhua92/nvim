@@ -20,7 +20,21 @@ if [ -d "$NVIM_DATA/lazy" ]; then
   rm -rf "$NVIM_DATA/lazy"
 fi
 
-# 3. Clear compiled cache (vim.loader rebuilds it on next launch)
+# 3. Prune dangling nvim-treesitter symlinks orphaned by step 2.
+#    nvim-treesitter symlinks each language's queries (and sometimes parsers)
+#    into $NVIM_DATA/site/{queries,parser}. After removing lazy/, those links
+#    point nowhere and silently break highlighting (parser loads, but
+#    vim.treesitter.query.get(lang, 'highlights') returns nil).
+for sub in queries parser; do
+  dir="$NVIM_DATA/site/$sub"
+  [ -d "$dir" ] || continue
+  while IFS= read -r -d '' link; do
+    echo "Removing dangling symlink: ${link#$NVIM_DATA/}"
+    rm -f "$link"
+  done < <(find "$dir" -maxdepth 1 -type l ! -exec test -e {} \; -print0)
+done
+
+# 4. Clear compiled cache (vim.loader rebuilds it on next launch)
 if [ -d "$NVIM_CACHE" ]; then
   echo "Clearing nvim cache..."
   rm -rf "$NVIM_CACHE"

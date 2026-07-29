@@ -128,5 +128,33 @@ vim.api.nvim_create_user_command('PackUpdate', function() vim.pack.update() end,
 ```
 Usage: `:PackStatus` to inspect, `:PackUpdate` to fetch updates.
 
+## 15. multicursor.nvim — `lua/custom/plugins/multicursor.lua`
+vim.pack (branch `1.0`). Keymaps adapted so they don't collide with the `<leader>s` (search) group: match-skip + extra actions live under a new `<leader>c` ([C]ursor) group. Mappings only apply in `n`/`x` mode; the cursor layer (rotate/delete/clear) auto-activates while multiple cursors exist, so the normal `<esc>` (nohlsearch) still works with a single cursor.
+
+Add cursors vertically (column editing):
+```
+<up> / <down>            add cursor on line above/below
+<leader><up> / <down>    skip a line (don't add cursor there)
+```
+Add cursors by matching text (rename-all style):
+```
+<leader>n  / <leader>N   add cursor on next/previous match of word under cursor
+<leader>cn / <leader>cN  skip next/previous match
+<leader>ca               add cursor to ALL matches in buffer
+<leader>cr               restore accidentally cleared cursors
+<C-LeftMouse>            add/remove a cursor by clicking
+```
+While multiple cursors are active (overlay layer):
+```
+<left> / <right>         rotate which cursor is the "main" one
+<leader>x                delete the main cursor
+<C-q>                    disable/enable all cursors (toggle)
+<esc>                    clear all cursors
+```
+Typical workflows:
+- Rename a word everywhere: cursor on word → `<leader>ca` → edit → `<esc>`.
+- Edit a column block: `<down>` ×N to stack cursors → `I`/`A` to insert at start/end → type → `<esc>`.
+- Selective matches: `<leader>n` to add next match, `<leader>cn` to skip one you don't want.
+
 ## Migration note
 Ported from lazy.nvim → vim.pack on 2026-07-28. Plugin specs in `lua/custom/plugins/*.lua` were rewritten from LazySpec tables to self-executing `vim.pack.add` + `setup()` calls. Old lazy.nvim version preserved on branch `backup/lazy-config`.

@@ -23,6 +23,20 @@ set({ 'n', 'x' }, '<leader>cN', function() mc.matchSkipCursor(-1) end, { desc = 
 -- Add a cursor to every match of the word under the cursor in the buffer.
 set({ 'n', 'x' }, '<leader>ca', mc.matchAllAddCursors, { desc = 'MC: Add All Matches' })
 
+-- Add cursors to every match and drop straight into change-word mode so you
+-- can type the replacement once and apply it everywhere. matchAllAddCursors
+-- places each cursor at the start of the matched word, so `cw` replaces it.
+set('n', '<leader>cR', function()
+  mc.matchAllAddCursors()
+  mc.feedkeys('cw')
+end, { desc = 'MC: Add All & Replace Word' })
+
+-- Add a cursor to every match of the LAST search (/ register). Unlike
+-- matchAllAddCursors this matches anything you searched for, including parts
+-- of a word (e.g. "foo" inside "foobar"). Flow: /pattern<cr> -> <leader>c/
+-- -> cw -> type replacement -> <esc>.
+set('n', '<leader>c/', mc.searchAllAddCursors, { desc = 'MC: Add All Search Matches' })
+
 -- Restore cursors you accidentally cleared.
 set('n', '<leader>cr', mc.restoreCursors, { desc = 'MC: Restore Cursors' })
 

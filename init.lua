@@ -171,6 +171,10 @@ do
   -- instead raise a dialog asking if you wish to save the current file(s)
   -- See `:help 'confirm'`
   vim.o.confirm = true
+
+  -- Enable filetype-based indentation (loads $VIMRUNTIME/indent/<ft>.vim).
+  -- Used as the fallback now that treesitter indentation is disabled.
+  vim.cmd 'filetype plugin indent on'
 end
 
 -- ============================================================
@@ -1037,12 +1041,11 @@ do
     -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     -- vim.wo.foldmethod = 'expr'
 
-    -- Check if treesitter indentation is available for this language, and if so enable it
-    -- in case there is no indent query, the indentexpr will fallback to the vim's built in one
-    local has_indent_query = vim.treesitter.query.get(language, 'indents') ~= nil
-
-    -- Enable treesitter based indentation
-    if has_indent_query then vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()" end
+    -- NOTE: treesitter indentation is intentionally disabled. The `main` branch
+    -- indentexpr miscalculates indent for Python (and others) while typing
+    -- incomplete syntax, causing large indent jumps. We rely on Vim's built-in
+    -- filetype indent (e.g. $VIMRUNTIME/indent/python.vim) instead, which is
+    -- enabled via `:filetype indent on`.
   end
 
   local available_parsers = require('nvim-treesitter').get_available()

@@ -786,14 +786,25 @@ do
     -- gopls = {},
     rust_analyzer = {},
     pyright = {
-      cmd = (function()
-        local root = vim.fs.root(0, { 'pyproject.toml', 'pyrightconfig.json' })
-        if root then
-          local local_python = root .. '/.venv/bin/python'
-          if vim.fn.executable(local_python) == 1 then return { local_python, '-m', 'pyright.langserver', '--stdio' } end
+      on_new_config = function(new_config, new_root_dir)
+        local venv_pyright = new_root_dir .. '/.venv/bin/pyright-langserver'
+        local node_pyright = new_root_dir .. '/node_modules/.bin/pyright-langserver'
+
+        if vim.fn.executable(venv_pyright) == 1 then
+          new_config.cmd = { venv_pyright, '--stdio' }
+        elseif vim.fn.executable(node_pyright) == 1 then
+          new_config.cmd = { node_pyright, '--stdio' }
+        else
+          new_config.cmd = { 'pyright-langserver', '--stdio' }
         end
-        return { 'pyright-langserver', '--stdio' }
-      end)(),
+
+        local venv_python = new_root_dir .. '/.venv/bin/python'
+        if vim.fn.executable(venv_python) == 1 then
+          new_config.settings = vim.tbl_deep_extend('force', new_config.settings or {}, {
+            python = { pythonPath = venv_python },
+          })
+        end
+      end,
       settings = {
         python = {
           analysis = {

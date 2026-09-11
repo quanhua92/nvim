@@ -174,5 +174,9 @@ vim.pack. Sessions auto-save on exit to `stdpath/state/sessions/`, restoring win
 <leader>qd   quit without saving the session
 ```
 
+## 18. Python PEP 8 Indent — `lua/custom/plugins/python-indent.lua`
+`vim.pack.add { 'https://github.com/Vimjas/vim-python-pep8-indent' }`.
+Overrides Vim's built-in `$VIMRUNTIME/indent/python.vim` (`python#GetIndent`) to follow PEP 8 indentation, eliminating the 26-column jump on compound brackets (e.g. `messages=[{`) and handling incomplete syntax mid-edit.
+
 ## Migration note
 Ported from lazy.nvim → vim.pack on 2026-07-28. Plugin specs in `lua/custom/plugins/*.lua` were rewritten from LazySpec tables to self-executing `vim.pack.add` + `setup()` calls. Old lazy.nvim version preserved on branch `backup/lazy-config`.
